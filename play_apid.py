@@ -53,10 +53,6 @@ def print_gotten():
 		return
 
 	for i, (word, value, category, hints) in enumerate(gotten): # print all the gotten words
-		print(word, value, category, hints)
-		print("{2[0]:s}".format(word, value, category), end=['  ', '  ', '\n'][i%4]) # in four columns
-		print("{1:1d}".format(word, value, category), end=['  ', '  ', '\n'][i%4]) # in four columns
-		print("{0:9s}".format(word, value, category), end=['  ', '  ', '\n'][i%4]) # in four columns
 		print("{2[0]:s}{1:1d}:{0:9s}".format(word, value, category), end=['  ', '  ', '\n'][i%4]) # in four columns
 	if i%4 != 3:
 		print()
@@ -78,9 +74,16 @@ def print_histogram():
 
 def print_hint():
 	print()
-	remain = random.choice(remaining)
-	hint = remain[0][:remain[3]] + "•"*(len(remain[0]) - remain[3]) # give the first few letters
-	print("Remaining {:s} word: {}".format(remain[2], hint))
+	remain = remaining[0]
+	if remain[3] == 0:
+		remain[3] += 1 # the first hint costs double
+		remain[1] -= 1
+	word, value, category, hints = remain
+	if len(word) - hints < 0:
+		print("Seriously? I literally gave you the entire word. {}.".format(word))
+	else:
+		hint = "•"*(len(word) - hints) + word[-hints:] # give the last few letters
+		print("Remaining {:s} word: {}".format(remain[2], hint))
 	remain[3] += 1 # remember this hint
 	remain[1] -= 1 # decrement the value
 	print()
@@ -89,7 +92,11 @@ def get_word(get):
 	for i, (word, value, category, hints) in enumerate(remaining):
 		if get == word:
 			bisect.insort(gotten, remaining.pop(i))
-			print(random.choice(["Yep!","Jes!","Ye got it!","Yeah!","Yea!","Yee!","Ya!","Yas!","Yeet!","un!","si!"]))
+			print(random.choice(["Yep!","Jes!","Ye got it!","Yeah!","Yea!","Yee!","Ya!","Yas!","Yeet!","un!","si!"]), end='')
+			if word == pangram:
+				print(" And that was the pangram!")
+			else:
+				print()
 			return value
 	print(random.choice(["Nope.","Ne.","Alas.","Not.","Nah.","Nay.",u"Нет.","no."]))
 	return 0
@@ -110,6 +117,8 @@ while True:
 			print_hint()
 		elif put == '\\quit':
 			break
+		elif put.startswith('\\'):
+			print("Unreccognized cummand.")
 		else:
 			score += get_word(put)
 		if len(remaining) == 0:

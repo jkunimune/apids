@@ -14,7 +14,9 @@ for filename in filenames:
 	if "hacker" in filename:
 		category = "hacker"
 	elif "abbrev" in filename:
-		category = "abbr."
+		category = "Abbr."
+	elif "yumbo" in filename:
+		category = "memetic"
 	elif "variant" in filename:
 		category = "variant"
 	elif "10" in filename:
@@ -47,7 +49,7 @@ for filename in filenames:
 
 with open("wordlists/words", 'w') as f:
 	for word, length, category in words:
-		f.write("{:s}\t{:d}\t{:s}\n".format(word, length+(1 if category == 'apiary' else 0), category))
+		f.write("{:s}\t{:d}\t{:s}\n".format(word, length+(1 if category in ['apiary', 'memetic', 'hacker'] else 0), category))
 
 with open("wordlists/pangrams", 'w') as f:
 	f.write("{:d}\n".format(len(pangrams)))
