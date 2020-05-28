@@ -39,16 +39,17 @@ for filename in filenames:
 					seen.add(word.lower())
 					num_letters = len(set(word.lower()))
 					if num_letters <= 7:
-						words.append([len(word), word, category])
-					if num_letters == 7:
+						words.append([word, len(word), category])
+					if num_letters == 7 and category != "apiary":
 						pangrams.append(word.lower())
 	except FileNotFoundError:
 		pass
 
 with open("wordlists/words", 'w') as f:
-	for length, word, category in words:
-		f.write("{:d}\t{:s}\t{:s}\n".format(length, word, category))
+	for word, length, category in words:
+		f.write("{:s}\t{:d}\t{:s}\n".format(word, length+(1 if category == 'apiary' else 0), category))
 
 with open("wordlists/pangrams", 'w') as f:
+	f.write("{:d}\n".format(len(pangrams)))
 	for word in pangrams:
 		f.write("{:s}\n".format(word))
