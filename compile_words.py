@@ -1,4 +1,4 @@
-filenames = []
+filenames = [] # compile a list of filenames from least to most interesting words
 for size in [10, 20, 35, 40, 50]:
 	for category in ["words", "contractions", "abbreviations", "upper"]:
 		filenames.append("english-{:s}.{:d}".format(category, size))
@@ -11,7 +11,7 @@ words = []
 pangrams = []
 
 for filename in filenames:
-	if "hacker" in filename:
+	if "hacker" in filename: # each one has an associated category name
 		category = "hacker"
 	elif "abbrev" in filename:
 		category = "Abbr."
@@ -26,24 +26,23 @@ for filename in filenames:
 	else:
 		category = "normal"
 	try:
-		with open("wordlists/{}".format(filename), 'r') as f:
-			word = f.readline()
-			while len(word) > 0:
-				word = f.readline()
-				if len(word) == 0:
+		with open("wordlists/{}".format(filename), 'r') as f: # open them all
+			while True:
+				line = f.readline()
+				if len(line) == 0: # read until we are out of lines
 					break
-				word = word.strip()
+				word = line.strip() # pull out the word
 				if len(word) >= 4:
-					if word == "nigger" or word == "nigger's" or word == "niggers":
+					if word == "nigger" or word == "nigger's" or word == "niggers": # with the exception of a short blacklist
 						continue
-					if word.lower() in seen:
+					if word.lower() in seen: # and making sure to avoid taking words multiple times (this is rarely an issue)
 						continue
 					seen.add(word.lower())
-					num_letters = len(set(word.lower()))
+					num_letters = len(set(word.lower())) # count the letters
 					if num_letters <= 7:
-						words.append([word, len(word), category])
+						words.append([word, len(word), category]) # save it a a word
 					if num_letters == 7 and category != "apiary":
-						pangrams.append(word.lower())
+						pangrams.append(word.lower()) # and as a pangram, if applicable
 	except FileNotFoundError:
 		pass
 
