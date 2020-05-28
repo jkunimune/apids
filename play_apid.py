@@ -1,3 +1,12 @@
+import sys, codecs
+
+if sys.stdout.encoding is None or sys.stdout.encoding == 'ANSI_X3.4-1968':
+	utf8_writer = codecs.getwriter('UTF-8')
+	if sys.version_info.major < 3:
+		sys.stdout = utf8_writer(sys.stdout, errors='replace')
+	else:
+		sys.stdout = utf8_writer(sys.stdout.buffer, errors='replace')
+
 import bisect
 import random
 
@@ -40,6 +49,7 @@ def print_gotten():
 	print()
 	if len(gotten) == 0:
 		print("You have gotten 0 words.")
+		print()
 		return
 
 	for i, (word, value, category, hints) in enumerate(gotten): # print all the gotten words
@@ -79,7 +89,7 @@ def get_word(get):
 	for i, (word, value, category, hints) in enumerate(remaining):
 		if get == word:
 			bisect.insort(gotten, remaining.pop(i))
-			print(random.choice(["Yep!","Jes!","Ye got it!","Yeah!","Yea!","Yee!","Ya!","Yas!","Yeet!",u"うん！","si!"]))
+			print(random.choice(["Yep!","Jes!","Ye got it!","Yeah!","Yea!","Yee!","Ya!","Yas!","Yeet!","un!","si!"]))
 			return value
 	print(random.choice(["Nope.","Ne.","Alas.","Not.","Nah.","Nay.",u"Нет.","no."]))
 	return 0
