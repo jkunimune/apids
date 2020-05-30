@@ -1,8 +1,10 @@
 filenames = [] # compile a list of filenames from least to most interesting words
-for size in [10, 20, 35, 40, 50]:
-	for category in ["words", "contractions", "abbreviations", "upper"]:
+for size in [10, 20, 35, 40, 50, 55]:
+	for category in ["words", "contractions", "abbreviations"]:
 		filenames.append("english-{:s}.{:d}".format(category, size))
 		filenames.append("american-{:s}.{:d}".format(category, size))
+		filenames.append("variant_1-{:s}.{:d}".format(category, size))
+		filenames.append("variant_2-{:s}.{:d}".format(category, size))
 filenames.append("special-hacker.50")
 filenames.append("yumbology")
 
@@ -23,6 +25,16 @@ for filename in filenames:
 		category = "basic"
 	elif "50" in filename:
 		category = "apiary"
+	elif "55" in filename:
+		category = "apiary"
+	elif "60" in filename:
+		category = "apiary"
+	elif "70" in filename:
+		category = "ultra"
+	elif "80" in filename:
+		category = "ultra"
+	elif "95" in filename:
+		category = "insane"
 	else:
 		category = "normal"
 	try:

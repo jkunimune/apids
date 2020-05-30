@@ -33,7 +33,7 @@ while True:
 				remaining.append([word, int(value), category, 0])
 				max_score += int(value)
 
-	if len(remaining) < 20 or len(remaining) >= 60: # make sure the number of words is reasonable
+	if len(remaining) < 20 or len(remaining) >= 50: # make sure the number of words is reasonable
 		continue
 	break
 
@@ -52,8 +52,9 @@ def print_gotten():
 		print()
 		return
 
-	for i, (word, value, category, hints) in enumerate(gotten): # print all the gotten words
-		print("{2[0]:s}{1:1d}:{0:9s}".format(word, value, category), end=['  ', '  ', '\n'][i%4]) # in four columns
+	for i, (word, value, category, hints) in enumerate(sorted(gotten)): # print all the gotten words
+		print("{2[0]:s}{1:1d}:{0:9s}".format(word, value, category), end=['  ', '  ', '  ', '\n'][i%4]) # in four columns
+		# print("{:9s}".format(word), end=['  ', '  ', '  ', '\n'][i%4]) # in four columns
 	if i%4 != 3:
 		print()
 	print()
@@ -90,7 +91,7 @@ def print_hint():
 
 def get_word(get):
 	for i, (word, value, category, hints) in enumerate(remaining):
-		if get == word:
+		if get.lower() == word.lower():
 			bisect.insort(gotten, remaining.pop(i))
 			print(random.choice(["Yep!","Jes!","Ye got it!","Yeah!","Yea!","Yee!","Ya!","Yas!","Yeet!","un!","si!"]), end='')
 			if word == pangram:
@@ -123,6 +124,7 @@ while True:
 			score += get_word(put)
 		if len(remaining) == 0:
 			print()
+			print_gotten()
 			print("barke! ye got queen apid with {}/{} possible points!".format(score, max_score))
 			break
 	except Exception as e:
