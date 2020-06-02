@@ -1,5 +1,5 @@
 filenames = [] # compile a list of filenames from least to most interesting words
-for size in [10, 20, 35, 40, 50, 55]:
+for size in [10, 20, 35, 40, 50, 55, 60, 70, 80]:
 	for category in ["words", "contractions", "abbreviations"]:
 		filenames.append("english-{:s}.{:d}".format(category, size))
 		filenames.append("american-{:s}.{:d}".format(category, size))
@@ -53,14 +53,14 @@ for filename in filenames:
 					num_letters = len(set(word.lower())) # count the letters
 					if num_letters <= 7:
 						words.append([word, len(word), category]) # save it a a word
-					if num_letters == 7 and category != "apiary":
+					if num_letters == 7 and category != "apiary" and category != "ultra" and category != "insane":
 						pangrams.append(word.lower()) # and as a pangram, if applicable
 	except FileNotFoundError:
 		pass
 
 with open("wordlists/words", 'w') as f:
 	for word, length, category in words:
-		f.write("{:s}\t{:d}\t{:s}\n".format(word, length+(1 if category in ['apiary', 'memetic', 'hacker'] else 0), category))
+		f.write("{:s}\t{:d}\t{:s}\n".format(word, length+(1 if category in ['apiary', 'ultra', 'insane', 'memetic', 'hacker'] else 0), category))
 
 with open("wordlists/pangrams", 'w') as f:
 	f.write("{:d}\n".format(len(pangrams)))
