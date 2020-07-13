@@ -77,16 +77,16 @@ def print_hint():
 	print()
 	remain = remaining[0]
 	if remain[3] == 0:
-		remain[3] += 1 # the first hint costs double
-		remain[1] -= 1
+		remain[3] += 2 # the first hint costs extra
+		remain[1] -= 2
 	word, value, category, hints = remain
 	if len(word) - hints < 0:
 		print("Seriously? I literally gave you the entire word. {}.".format(word))
 	else:
 		hint = "•"*(len(word) - hints) + word[-hints:] # give the last few letters
 		print("Remaining {:s} word: {}".format(remain[2], hint))
-	remain[3] += 1 # remember this hint
-	remain[1] -= 1 # decrement the value
+	remain[1] -= min(2, len(word) - remain[3]) # decrement the value
+	remain[3] += min(2, len(word) - remain[3]) # remember this hint
 	print()
 
 def get_word(get):
