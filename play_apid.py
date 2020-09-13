@@ -22,6 +22,7 @@ while True:
 
 	gotten = [] # list of [word, score value, category, number of hints taken]
 	remaining = [] # list of [word, score value, category, number of hints taken]
+	bonuses = [] # list of [word, score value, category, number of hints taken]
 	max_score = 0 # max possible score
 	with open('wordlists/words', 'r') as f:
 		while True:
@@ -30,12 +31,16 @@ while True:
 				break
 			word, value, category = line.strip().split('\t')
 			if bolded in word.lower() and set(word.lower()).issubset(letters):
-				remaining.append([word, int(value), category, 0])
-				max_score += int(value)
+				if category not in ['variant', 'ultra', 'fake', 'Abbr.']:
+					remaining.append([word, int(value), category, 0])
+					max_score += int(value)
+				else:
+					bonuses.append([word, int(value), category, 0])
 
-	if len(remaining) < 20 or len(remaining) >= 50: # make sure the number of words is reasonable
+	if len(remaining) < 25 or len(remaining) >= 55: # make sure the number of words is reasonable
 		continue
 	break
+
 
 def print_letters():
 	print()
@@ -60,6 +65,7 @@ def print_gotten():
 	print()
 	
 def print_histogram():
+	print(f"You have {score} out of {max_score} points.")
 	print()
 	for length in range(4, 20):
 		count = {}
@@ -90,17 +96,36 @@ def print_hint():
 	print()
 
 def get_word(get):
-	for i, (word, value, category, hints) in enumerate(remaining):
+	for letter in get.lower():
+		if letter not in letters:
+			print(f"There's no '{letter}'.")
+			return 0
+	if bolded not in get.lower():
+		print(f"It has to contain '{bolded}'.")
+		return 0
+
+	for i, (word, value, category, hints) in enumerate(remaining): # check if it is a remaining word
 		if get.lower() == word.lower():
-			bisect.insort(gotten, remaining.pop(i))
+			bisect.insort(gotten, remaining.pop(i)) # if so, record it
 			print(random.choice(["Yep!","Jes!","Ye got it!","Yeah!","Yea!","Yee!","Ya!","Yas!","Yeet!","un!","si!"]), end='')
 			if word == pangram:
 				print(" And that was the pangram!")
 			else:
 				print()
 			return value
+	for i, (word, value, category, hints) in enumerate(bonuses): # check if it is a bonus word
+		if get.lower() == word.lower():
+			bisect.insort(gotten, bonuses.pop(i)) # if so, record it, as well
+			print(random.choice(["Wow!","Holy cow, yes!","¡Increíble!","Apparently̤‽","That's an obscure one!","That's a bonus word!"]))
+			return value
+
+	for i, (word, value, category, hints) in enumerate(gotten): # check if it is gotten
+		if get.lower() == word.lower():
+			print("Ye already got that one.")
+			return 0
 	print(random.choice(["Nope.","Ne.","Alas.","Not.","Nah.","Nay.",u"Нет.","no."]))
 	return 0
+
 
 score = 0
 print("The max score is {}. Beegin!".format(max_score))
@@ -123,9 +148,13 @@ while True:
 		else:
 			score += get_word(put)
 		if len(remaining) == 0:
-			print()
+			print() # end the game
 			print_gotten()
 			print("barke! ye got queen apid with {}/{} possible points!".format(score, max_score))
+			if len(bonuses) > 0:
+				print("not included in today's apid:")
+				for word, value, category, hints in bonuses:
+					print(f"{word} ({category})")
 			break
 	except Exception as e:
 		print(e)
