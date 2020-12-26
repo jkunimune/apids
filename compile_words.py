@@ -28,11 +28,11 @@ for filename in filenames:
 	elif "55" in filename:
 		category = "apiary"
 	elif "60" in filename:
-		category = "ultra"
+		category = "obscure"
 	elif "70" in filename:
-		category = "ultra"
+		category = "obscure"
 	elif "80" in filename:
-		category = "ultra"
+		category = "obscure"
 	elif "95" in filename:
 		category = "fake"
 	else:
@@ -53,7 +53,7 @@ for filename in filenames:
 					num_letters = len(set(word.lower())) # count the letters
 					if num_letters <= 7:
 						words.append([word, len(word), category]) # save it a a word
-					if num_letters == 7 and category not in ["apiary", "ultra", "fake", "variant"]:
+					if num_letters == 7 and category not in ["apiary", "obscure", "fake", "variant"] and not ("'" in word and "s" in word.lower()):
 						pangrams.append(word.lower()) # and as a pangram, if applicable
 	except FileNotFoundError:
 		pass
@@ -62,7 +62,7 @@ with open("wordlists/words", 'w') as f:
 	for word, length, category in words:
 		if category == 'fake':
 			score_bonus = 3
-		elif category == 'ultra':
+		elif category == 'obscure':
 			score_bonus = 2
 		elif category in ['apiary', 'memetic', 'hacker', 'variant', 'Abbr.']:
 			score_bonus = 1

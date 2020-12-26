@@ -31,7 +31,7 @@ while True:
 				break
 			word, value, category = line.strip().split('\t')
 			if bolded in word.lower() and set(word.lower()).issubset(letters):
-				if category not in ['variant', 'ultra', 'fake', 'Abbr.']:
+				if category not in ['variant', 'obscure', 'fake', 'Abbr.', 'hacker']:
 					remaining.append([word, int(value), category, 0])
 					max_score += int(value)
 				else:
@@ -128,7 +128,7 @@ def get_word(get):
 
 
 score = 0
-print("The max score is {}. Beegin!".format(max_score))
+print("welcome to Apids: the totally original word listing game! the max score is {}. Beegin!".format(max_score))
 print_letters()
 while True:
 	put = input("{:03d} > ".format(score))
@@ -142,6 +142,9 @@ while True:
 		elif put == '\\hint':
 			print_hint()
 		elif put == '\\quit':
+			print("ha. loser. here's what you missed.")
+			print(remaining)
+			print(bonuses)
 			break
 		elif put.startswith('\\'):
 			print("Unreccognized cummand.")
