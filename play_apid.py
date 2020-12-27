@@ -31,7 +31,7 @@ while True:
 				break
 			value, word, category = line.strip().split('\t')
 			if bolded in word.lower() and set(word.lower()).issubset(letters):
-				if category not in ['variant', 'obscure', 'fake', 'Abbr.', 'hacker']:
+				if category not in ['variant', 'obscure', 'fake', 'Abbr.', 'hacker', 'memetic']:
 					remaining.append([word, int(value), category, 0])
 					max_score += int(value)
 				else:
@@ -107,7 +107,7 @@ def get_word(get):
 	for i, (word, value, category, hints) in enumerate(remaining): # check if it is a remaining word
 		if get.lower() == word.lower():
 			bisect.insort(gotten, remaining.pop(i)) # if so, record it
-			print(random.choice(["Yep!","Jes!","Ye got it!","Yeah!","Yea!","Yee!","Ya!","Yas!","Yeet!","un!","si!"]), end='')
+			print(random.choice(["Yep!","Yahoo!","Ye got it!","Yeah!","Yea!","Yee!","Ya!","Yas!","Yeet!"]), end='')
 			if word == pangram:
 				print(" And that was the pangram!")
 			else:
@@ -116,14 +116,14 @@ def get_word(get):
 	for i, (word, value, category, hints) in enumerate(bonuses): # check if it is a bonus word
 		if get.lower() == word.lower():
 			bisect.insort(gotten, bonuses.pop(i)) # if so, record it, as well
-			print(random.choice(["Wow!","Holy cow, yes!","¡Increíble!","Apparently̤‽","That's an obscure one!","That's a bonus word!"]))
+			print(random.choice(["Wow!","Wow! Yes!","Wow! ¡Increíble!","Wow! Apparently̤‽","Wow! That's an obscure one!","Wow! That's a bonus word!"]))
 			return value
 
 	for i, (word, value, category, hints) in enumerate(gotten): # check if it is gotten
 		if get.lower() == word.lower():
 			print("Ye already got that one.")
 			return 0
-	print(random.choice(["Nope.","Ne.","Alas.","Not.","Nah.","Nay.",u"Нет.","no."]))
+	print(random.choice(["Nope.","Ne.","No, alas.","Not.","Nah.","Nay.",u"Нет.","no."]))
 	return 0
 
 

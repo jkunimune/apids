@@ -53,8 +53,9 @@ for filename in filenames:
 					num_letters = len(set(word.lower())) # count the letters
 					if num_letters <= 7:
 						words.append((len(word), word, category)) # save it a a word
-					if num_letters == 7 and category not in ["apiary", "obscure", "fake", "variant"] and not ("'" in word and "s" in word.lower()) \
-							and not word.endswith('s') and not word.endswith('ed') and not word.endswith('ing'):
+					if num_letters == 7 and category not in ["apiary", "obscure", "fake", "variant"] \
+							and not ("'" in word and "s" in word.lower()) and not ("e" in word.lower() and "d" in word.lower()) \
+							and not word.endswith('s') and not word.endswith('ed') and not word.endswith('ing') and not word.endswith('ly') and not word.endswith('er') and not word.endswith('est'):
 						pangrams.append(word.lower()) # and as a pangram, if applicable
 	except FileNotFoundError:
 		pass
