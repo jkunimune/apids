@@ -29,7 +29,7 @@ while True:
 			line = f.readline()
 			if len(line) == 0:
 				break
-			word, value, category = line.strip().split('\t')
+			value, word, category = line.strip().split('\t')
 			if bolded in word.lower() and set(word.lower()).issubset(letters):
 				if category not in ['variant', 'obscure', 'fake', 'Abbr.', 'hacker']:
 					remaining.append([word, int(value), category, 0])
@@ -37,7 +37,7 @@ while True:
 				else:
 					bonuses.append([word, int(value), category, 0])
 
-	if len(remaining) < 25 or len(remaining) >= 55: # make sure the number of words is reasonable
+	if len(remaining) < 25 or len(remaining) >= 65: # make sure the number of words is reasonable
 		continue
 	break
 

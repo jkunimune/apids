@@ -52,23 +52,28 @@ for filename in filenames:
 					seen.add(word.lower())
 					num_letters = len(set(word.lower())) # count the letters
 					if num_letters <= 7:
-						words.append([word, len(word), category]) # save it a a word
-					if num_letters == 7 and category not in ["apiary", "obscure", "fake", "variant"] and not ("'" in word and "s" in word.lower()):
+						words.append((len(word), word, category)) # save it a a word
+					if num_letters == 7 and category not in ["apiary", "obscure", "fake", "variant"] and not ("'" in word and "s" in word.lower()) \
+							and not word.endswith('s') and not word.endswith('ed') and not word.endswith('ing'):
 						pangrams.append(word.lower()) # and as a pangram, if applicable
 	except FileNotFoundError:
 		pass
 
+for i, (length, word, category) in enumerate(words): # apply score bonuses
+	if category == 'fake':
+		score_bonus = 3
+	elif category in ['obscure', 'memetic']:
+		score_bonus = 2
+	elif category in ['apiary', 'hacker', 'variant', 'Abbr.']:
+		score_bonus = 1
+	else:
+		score_bonus = 0
+	words[i] = (length + score_bonus, word, category)
+words.sort()
+
 with open("wordlists/words", 'w') as f:
-	for word, length, category in words:
-		if category == 'fake':
-			score_bonus = 3
-		elif category == 'obscure':
-			score_bonus = 2
-		elif category in ['apiary', 'memetic', 'hacker', 'variant', 'Abbr.']:
-			score_bonus = 1
-		else:
-			score_bonus = 0
-		f.write("{:s}\t{:d}\t{:s}\n".format(word, length + score_bonus, category))
+	for value, word, category in words:
+		f.write("{:d}\t{:s}\t{:s}\n".format(value, word, category))
 
 with open("wordlists/pangrams", 'w') as f:
 	f.write("{:d}\n".format(len(pangrams)))
